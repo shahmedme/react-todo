@@ -40,7 +40,7 @@ export default class TodoItem extends Component {
 				{this.state.showActionButtons ? (
 					<>
 						<p>{this.state.title}</p>
-						<div className="action-buttons">
+						<div className="hidden action-buttons">
 							<EditButton handleEditTodo={this.handleEditTodo} />
 							<DeleteButton handleDeleteTodo={this.handleDeleteTodo} />
 						</div>

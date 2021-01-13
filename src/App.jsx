@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import AddTodoItem from "./components/AddTodoItem";
 import TodoItem from "./components/TodoItem";
+import { Button } from "antd";
 import "./App.css";
 
 export default class App extends Component {
@@ -10,8 +11,11 @@ export default class App extends Component {
 
 	componentDidMount() {
 		let todos = JSON.parse(localStorage.getItem("todos"));
-		todos.sort((item1, item2) => (item1.title > item2.title ? 1 : -1));
-		this.setState({ todos });
+
+		if (todos !== null) {
+			todos.sort((item1, item2) => (item1.title > item2.title ? 1 : -1));
+			this.setState({ todos });
+		}
 	}
 
 	handleAddTodo = (item) => {
@@ -22,7 +26,7 @@ export default class App extends Component {
 
 		let newTodoList = this.state.todos.concat(newTodo);
 		localStorage.setItem("todos", JSON.stringify(newTodoList));
-
+		// newTodoList.sort((item1, item2) => (item1.title > item2.title ? 1 : -1));
 		this.setState({ todos: newTodoList });
 	};
 
@@ -90,7 +94,7 @@ export default class App extends Component {
 							))}
 						</>
 					) : (
-						<div className="text-center mt-5 italic">No Todos Found</div>
+						<div className="text-center mt-5">No Todos Found</div>
 					)}
 				</div>
 			</div>
