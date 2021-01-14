@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { message, Button } from "antd";
 import AddTodoItem from "./components/AddTodoItem";
 import TodoItem from "./components/TodoItem";
 import WeatherBar from "./components/WeatherBar";
@@ -39,6 +40,7 @@ export default function App() {
 		let newTodoList = todos.concat(item);
 		localStorage.setItem("todos", JSON.stringify(newTodoList));
 		setTodos(newTodoList);
+		message.success("Successfully Added");
 	};
 
 	const handleUpdateTodo = (item) => {
@@ -56,6 +58,7 @@ export default function App() {
 
 		localStorage.setItem("todos", JSON.stringify(updatedTodos));
 		setTodos(updatedTodos);
+		message.info("Successfully Updated");
 	};
 
 	const handleDeleteTodo = (id) => {
@@ -63,6 +66,7 @@ export default function App() {
 
 		localStorage.setItem("todos", JSON.stringify(filteredTodoList));
 		setTodos(filteredTodoList);
+		message.info("Successfully Deleted");
 	};
 
 	// const handleSort = (e) => {
@@ -94,8 +98,9 @@ export default function App() {
 							</select>
 						</div>
 
-						{todos.map((todo) => (
+						{todos.map((todo, idx) => (
 							<TodoItem
+								key={idx}
 								item={todo}
 								handleUpdateTodo={handleUpdateTodo}
 								handleDeleteTodo={handleDeleteTodo}

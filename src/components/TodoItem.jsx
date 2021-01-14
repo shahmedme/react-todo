@@ -18,7 +18,11 @@ export default function TodoItem(props) {
 	};
 
 	const handleDeleteTodo = () => {
-		props.handleDeleteTodo(item.id);
+		let isDelete = window.confirm("Are you sure you want to delete?");
+
+		if (isDelete) {
+			props.handleDeleteTodo(item.id);
+		}
 	};
 
 	const handleUpdateTodo = () => {
