@@ -98,20 +98,32 @@ export default function App() {
 							</select>
 						</div>
 
-						{todos.map((todo, idx) => (
-							<TodoItem
-								key={idx}
-								item={todo}
-								handleUpdateTodo={handleUpdateTodo}
-								handleDeleteTodo={handleDeleteTodo}
-							/>
-						))}
+						<div className="todo-item-wrapper">
+							{todos.map((todo, idx) => (
+								<TodoItem
+									key={idx}
+									item={todo}
+									handleUpdateTodo={handleUpdateTodo}
+									handleDeleteTodo={handleDeleteTodo}
+								/>
+							))}
+						</div>
 					</>
 				) : (
 					<div className="text-center mt-5">No Todos Found</div>
 				)}
 				<WeatherBar />
 			</div>
+			<style jsx>{`
+				.todo-item-wrapper {
+					overflow-y: scroll;
+					height: 370px;
+				}
+
+				.todo-item-wrapper::-webkit-scrollbar {
+					display: none;
+				}
+			`}</style>
 		</div>
 	);
 }

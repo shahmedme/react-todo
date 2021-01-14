@@ -54,7 +54,7 @@ export default function TodoItem(props) {
 			<Card
 				bordered={false}
 				bodyStyle={{ padding: "7px 10px" }}
-				className="my-3 todo-item"
+				className="mb-3 todo-item"
 			>
 				{showActionButtons ? (
 					<>
