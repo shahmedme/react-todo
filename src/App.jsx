@@ -17,6 +17,8 @@ export default function App() {
 		}
 	}, []);
 
+	console.log(sortType);
+
 	// useEffect(() => {
 	// 	console.log("sort type is changed");
 	// 	if (sortType === "date") {
