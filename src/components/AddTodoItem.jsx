@@ -1,43 +1,41 @@
-import React, { Component } from "react";
+import React from "react";
+import { nanoid } from "nanoid";
+import { Form, Input, Button, DatePicker } from "antd";
 
-export default class Add extends Component {
-	state = {
-		title: "",
+export default function AddTodoItem(props) {
+	const [form] = Form.useForm();
+
+	const handleFormSubmit = (values) => {
+		values = {
+			...values,
+			date: values["date"].format("YYYY-MM-DD"),
+			id: nanoid(),
+		};
+		props.handleAddTodo(values);
+		form.resetFields();
 	};
 
-	handleFormSubmit = (e) => {
-		e.preventDefault();
-		this.props.handleAddTodo(this.state.title);
-		this.setState({
-			title: "",
-		});
-	};
-
-	handleInputChange = (e) => {
-		this.setState({
-			title: e.target.value,
-		});
-	};
-
-	render() {
-		return (
-			<div>
-				<form onSubmit={this.handleFormSubmit}>
-					<input
-						type="text"
-						value={this.state.title}
-						placeholder="What to do?"
-						className="py-2 px-3 rounded w-96 focus:outline-none"
-						onChange={this.handleInputChange}
-					/>
-					<button
-						type="submit"
-						className="bg-red-500 px-5 py-2 ml-2 text-white font-bold rounded focus:outline-none"
-					>
+	return (
+		<div>
+			<Form onFinish={handleFormSubmit} form={form} className="flex">
+				<Form.Item
+					name="title"
+					rules={[{ required: true, message: "Please enter todo title" }]}
+				>
+					<Input placeholder="What to do?" className="w-72" />
+				</Form.Item>
+				<Form.Item
+					name="date"
+					rules={[{ required: true, message: "Please enter a date" }]}
+				>
+					<DatePicker />
+				</Form.Item>
+				<Form.Item>
+					<Button type="primary" htmlType="submit" className="ml-2">
 						Add
-					</button>
-				</form>
-			</div>
-		);
-	}
+					</Button>
+				</Form.Item>
+			</Form>
+		</div>
+	);
 }

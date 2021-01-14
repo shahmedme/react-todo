@@ -1,67 +1,103 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
+import { Card } from "antd";
 import EditButton from "./Buttons/EditButton";
 import DeleteButton from "./Buttons/DeleteButton";
 
-export default class TodoItem extends Component {
-	state = {
-		item: this.props.item,
-		title: this.props.item.title,
-		showActionButtons: true,
+export default function TodoItem(props) {
+	const [item, setItem] = useState(props.item);
+	const [title, setTitle] = useState(props.item.title);
+	const [showActionButtons, setShowActionButtons] = useState(true);
+
+	const handleEditTodo = () => {
+		setShowActionButtons(false);
 	};
 
-	handleEditTodo = () => {
-		this.setState({ showActionButtons: false });
+	const handleDeleteTodo = () => {
+		props.handleDeleteTodo(item.id);
 	};
 
-	handleDeleteTodo = () => {
-		this.props.handleDeleteTodo(this.props.item.title);
-	};
-
-	handleUpdateTodo = () => {
-		let newItem = {
-			title: this.state.title,
-			date: this.state.item.date,
+	const handleUpdateTodo = () => {
+		let updatedItem = {
+			title: title,
+			date: item.date,
+			id: item.id,
 		};
-
-		this.props.handleUpdateTodo(this.props.item, newItem);
-
-		this.setState({
-			showActionButtons: true,
-		});
+		props.handleUpdateTodo(updatedItem);
+		setItem(updatedItem);
+		setShowActionButtons(true);
 	};
 
-	handleInputChange = (e) => {
-		this.setState({ title: e.target.value });
+	const handleUpdateCancel = () => {
+		setTitle(item.title);
+		setShowActionButtons(true);
 	};
 
-	render() {
-		return (
-			<div className="shadow-md bg-white my-3 rounded py-2 px-3 flex items-center justify-between todo-item">
-				{this.state.showActionButtons ? (
+	const handleInputChange = (e) => {
+		setTitle(e.target.value);
+	};
+
+	return (
+		<>
+			<Card
+				bordered={false}
+				bodyStyle={{ padding: "7px 10px" }}
+				className="my-3 todo-item"
+			>
+				{showActionButtons ? (
 					<>
-						<p>{this.state.title}</p>
+						<p className="title">{item.title}</p>
 						<div className="hidden action-buttons">
-							<EditButton handleEditTodo={this.handleEditTodo} />
-							<DeleteButton handleDeleteTodo={this.handleDeleteTodo} />
+							<EditButton handleEditTodo={handleEditTodo} />
+							<DeleteButton handleDeleteTodo={handleDeleteTodo} />
 						</div>
+						<div className="text-xs pt-0.5 date">{item.date}</div>
 					</>
 				) : (
 					<>
 						<input
 							type="text"
-							value={this.state.title}
-							className="w-full mr-4 focus:outline-none update-field"
-							onChange={this.handleInputChange}
+							value={title}
+							className="w-72 mr-4 focus:outline-none update-field"
+							onChange={handleInputChange}
 						/>
-						<button
-							className="focus:outline-none bg-green-500 text-white text-sm px-2 py-0.5 rounded"
-							onClick={this.handleUpdateTodo}
-						>
-							Update
-						</button>
+						<div className="buttons">
+							<button
+								className="focus:outline-none bg-red-500 text-white rounded-sm text-sm px-2 py-0.5 btn-update"
+								onClick={handleUpdateCancel}
+							>
+								Cancel
+							</button>
+							<button
+								className="focus:outline-none bg-green-500 text-white rounded-sm text-sm px-2 py-0.5 ml-1 btn-update"
+								onClick={handleUpdateTodo}
+							>
+								Update
+							</button>
+						</div>
 					</>
 				)}
-			</div>
-		);
-	}
+			</Card>
+			<style jsx>{`
+				.title {
+					float: left;
+				}
+
+				.date {
+					float: right;
+				}
+
+				.action-buttons {
+					float: right;
+				}
+
+				.update-field {
+					float: left;
+				}
+
+				.buttons {
+					float: right;
+				}
+			`}</style>
+		</>
+	);
 }
