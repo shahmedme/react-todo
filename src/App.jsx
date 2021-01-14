@@ -17,7 +17,11 @@ export default function App() {
 		}
 	}, []);
 
-	console.log(sortType);
+	// useEffect(() => {
+
+	// }, [todos]);
+
+	console.log("sort type is", sortType);
 
 	// useEffect(() => {
 	// 	console.log("sort type is changed");
@@ -73,7 +77,7 @@ export default function App() {
 	return (
 		<div className="flex justify-center">
 			<div className="my-24">
-				<h1 className="text-center text-4xl font-bold mb-5">TODO App</h1>
+				<h1 className="text-center text-4xl font-bold mb-5">TODO</h1>
 
 				<AddTodoItem handleAddTodo={handleAddTodo} />
 

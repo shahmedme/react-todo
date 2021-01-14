@@ -1,14 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card } from "antd";
 import EditButton from "./Buttons/EditButton";
 import DeleteButton from "./Buttons/DeleteButton";
 
 export default function TodoItem(props) {
 	const [item, setItem] = useState(props.item);
-	const [title, setTitle] = useState(props.item.title);
+	const [title, setTitle] = useState();
 	const [showActionButtons, setShowActionButtons] = useState(true);
 
+	useEffect(() => {
+		setItem(props.item);
+	}, [props]);
+
 	const handleEditTodo = () => {
+		setTitle(item.title);
 		setShowActionButtons(false);
 	};
 
@@ -17,14 +22,18 @@ export default function TodoItem(props) {
 	};
 
 	const handleUpdateTodo = () => {
-		let updatedItem = {
-			title: title,
-			date: item.date,
-			id: item.id,
-		};
-		props.handleUpdateTodo(updatedItem);
-		setItem(updatedItem);
-		setShowActionButtons(true);
+		if (title.length !== 0) {
+			let updatedItem = {
+				title: title,
+				date: item.date,
+				id: item.id,
+			};
+			props.handleUpdateTodo(updatedItem);
+			setItem(updatedItem);
+			setShowActionButtons(true);
+		} else {
+			alert("Field Can't be blank");
+		}
 	};
 
 	const handleUpdateCancel = () => {
@@ -45,7 +54,7 @@ export default function TodoItem(props) {
 			>
 				{showActionButtons ? (
 					<>
-						<p className="title">{item.title}</p>
+						<p className="title">{props.item.title}</p>
 						<div className="hidden action-buttons">
 							<EditButton handleEditTodo={handleEditTodo} />
 							<DeleteButton handleDeleteTodo={handleDeleteTodo} />
