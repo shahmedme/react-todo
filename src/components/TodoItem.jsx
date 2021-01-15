@@ -56,7 +56,7 @@ export default function TodoItem(props) {
 			: setShowActionButtons(true);
 	};
 
-	const handleStatus = () => {
+	const handleStatusChange = () => {
 		let updatedItem = {
 			...item,
 			status: "completed",
@@ -78,7 +78,7 @@ export default function TodoItem(props) {
 					<>
 						<div className="inline-flex">
 							{showActionButtons ? (
-								<Checkbox onChange={handleStatus}></Checkbox>
+								<Checkbox onChange={handleStatusChange}></Checkbox>
 							) : null}
 							<p className="title ml-2">{props.item.title}</p>
 						</div>
