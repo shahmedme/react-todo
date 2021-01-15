@@ -10,6 +10,7 @@ export default function AddTodoItem(props) {
 			...values,
 			date: values["date"].format("YYYY-MM-DD"),
 			id: nanoid(),
+			status: "new",
 		};
 		props.handleAddTodo(values);
 		form.resetFields();

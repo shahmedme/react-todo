@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Card } from "antd";
+import { Card, Checkbox } from "antd";
 import EditButton from "./Buttons/EditButton";
 import DeleteButton from "./Buttons/DeleteButton";
 
 export default function TodoItem(props) {
 	const [item, setItem] = useState(props.item);
 	const [title, setTitle] = useState();
-	const [showActionButtons, setShowActionButtons] = useState(true);
+	const [showActionButtons, setShowActionButtons] = useState(false);
+	const [editMode, setEditMode] = useState(false);
 
 	useEffect(() => {
 		setItem(props.item);
@@ -14,7 +15,7 @@ export default function TodoItem(props) {
 
 	const handleEditTodo = () => {
 		setTitle(item.title);
-		setShowActionButtons(false);
+		setEditMode(true);
 	};
 
 	const handleDeleteTodo = () => {
@@ -34,7 +35,7 @@ export default function TodoItem(props) {
 			};
 			props.handleUpdateTodo(updatedItem);
 			setItem(updatedItem);
-			setShowActionButtons(true);
+			setEditMode(false);
 		} else {
 			alert("Field Can't be blank");
 		}
@@ -42,11 +43,26 @@ export default function TodoItem(props) {
 
 	const handleUpdateCancel = () => {
 		setTitle(item.title);
-		setShowActionButtons(true);
+		setEditMode(false);
 	};
 
 	const handleInputChange = (e) => {
 		setTitle(e.target.value);
+	};
+
+	const handleActionButtonsVisibility = () => {
+		showActionButtons
+			? setShowActionButtons(false)
+			: setShowActionButtons(true);
+	};
+
+	const handleStatus = () => {
+		let updatedItem = {
+			...item,
+			status: "completed",
+		};
+		props.handleUpdateTodo(updatedItem);
+		setItem(updatedItem);
 	};
 
 	return (
@@ -55,20 +71,30 @@ export default function TodoItem(props) {
 				bordered={false}
 				bodyStyle={{ padding: "7px 10px" }}
 				className="mb-3 todo-item"
+				onMouseEnter={handleActionButtonsVisibility}
+				onMouseLeave={handleActionButtonsVisibility}
 			>
-				{showActionButtons ? (
+				{!editMode ? (
 					<>
-						<p className="title">{props.item.title}</p>
-						<div className="hidden action-buttons">
-							<EditButton handleEditTodo={handleEditTodo} />
-							<DeleteButton handleDeleteTodo={handleDeleteTodo} />
+						<div className="inline-flex">
+							{showActionButtons ? (
+								<Checkbox onChange={handleStatus}></Checkbox>
+							) : null}
+							<p className="title ml-2">{props.item.title}</p>
 						</div>
-						<div className="text-xs pt-0.5 date">
-							{new Date(item.date).toLocaleString("default", {
-								day: "numeric",
-								month: "long",
-							})}
-						</div>
+						{showActionButtons ? (
+							<div className="action-buttons">
+								<EditButton handleEditTodo={handleEditTodo} />
+								<DeleteButton handleDeleteTodo={handleDeleteTodo} />
+							</div>
+						) : (
+							<div className="text-xs pt-0.5 date">
+								{new Date(item.date).toLocaleString("default", {
+									day: "numeric",
+									month: "long",
+								})}
+							</div>
+						)}
 					</>
 				) : (
 					<>
@@ -110,6 +136,7 @@ export default function TodoItem(props) {
 
 				.update-field {
 					float: left;
+					border-bottom: 1px solid rgba(0, 0, 0, 0.6);
 				}
 
 				.buttons {

@@ -33,14 +33,14 @@ export default class WeatherBar extends Component {
 			<div className="wrapper">
 				{this.state.weatherData != null ? this.getWeatherBar() : null}
 
-				<style>{`
-                    .wrapper {
-                        position: fixed;
-                        bottom: 20px;
-                        left: 50%;
-                        transform: translateX(-50%)
-                    }
-                `}</style>
+				<style jsx>{`
+					.wrapper {
+						position: fixed;
+						bottom: 20px;
+						left: 50%;
+						transform: translateX(-50%);
+					}
+				`}</style>
 			</div>
 		);
 	}
