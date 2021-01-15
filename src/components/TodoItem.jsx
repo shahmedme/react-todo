@@ -63,7 +63,12 @@ export default function TodoItem(props) {
 							<EditButton handleEditTodo={handleEditTodo} />
 							<DeleteButton handleDeleteTodo={handleDeleteTodo} />
 						</div>
-						<div className="text-xs pt-0.5 date">{item.date}</div>
+						<div className="text-xs pt-0.5 date">
+							{new Date(item.date).toLocaleString("default", {
+								day: "numeric",
+								month: "long",
+							})}
+						</div>
 					</>
 				) : (
 					<>

@@ -7,37 +7,23 @@ import "./App.css";
 
 export default function App() {
 	const [todos, setTodos] = useState([]);
-	const [sortType, setSortType] = useState("title");
 
 	useEffect(() => {
 		let todos = JSON.parse(localStorage.getItem("todos"));
 
 		if (todos !== null) {
-			todos.sort((item1, item2) => (item1.title > item2.title ? 1 : -1));
+			todos.sort((item1, item2) =>
+				item1.title.toLowerCase() > item2.title.toLowerCase() ? 1 : -1
+			);
 			setTodos(todos);
 		}
 	}, []);
 
-	// useEffect(() => {
-
-	// }, [todos]);
-
-	console.log("sort type is", sortType);
-
-	// useEffect(() => {
-	// 	console.log("sort type is changed");
-	// 	if (sortType === "date") {
-	// 		console.log("sorting is started");
-	// 		let sortedTodosByDate = [...todos].sort(
-	// 			(item1, item2) => Date.parse(item1.date) - Date.parse(item2.date)
-	// 		);
-	// 		console.log(sortedTodosByDate);
-	// 		// setTodos(sortedTodosByDate);
-	// 	}
-	// }, [sortType]);
-
 	const handleAddTodo = (item) => {
-		let newTodoList = todos.concat(item);
+		let newTodoList = [...todos, item];
+		newTodoList.sort((item1, item2) =>
+			item1.title.toLowerCase() > item2.title.toLowerCase() ? 1 : -1
+		);
 		localStorage.setItem("todos", JSON.stringify(newTodoList));
 		setTodos(newTodoList);
 		message.success("Successfully Added");
@@ -69,14 +55,24 @@ export default function App() {
 		message.info("Successfully Deleted");
 	};
 
-	// const handleSort = (e) => {
-	// 	if (e.target.value === "date") {
-	// 		let sortedTodosByDate = [...todos].sort(
-	// 			(item1, item2) => Date.parse(item1.date) - Date.parse(item2.date)
-	// 		);
-	// 		setTodos(sortedTodosByDate);
-	// 	}
-	// };
+	const handleSort = (e) => {
+		switch (e.target.value) {
+			case "title":
+				let sortedTodosByTitle = [...todos].sort((item1, item2) =>
+					item1.title.toLowerCase() > item2.title.toLowerCase() ? 1 : -1
+				);
+				setTodos(sortedTodosByTitle);
+				break;
+			case "date":
+				let sortedTodosByDate = [...todos].sort(
+					(item1, item2) => Date.parse(item1.date) - Date.parse(item2.date)
+				);
+				setTodos(sortedTodosByDate);
+				break;
+			default:
+				console.log("hello");
+		}
+	};
 
 	return (
 		<div className="flex justify-center">
@@ -91,7 +87,7 @@ export default function App() {
 							<p className="text-xs text-black-100">Sort by</p>
 							<select
 								className="rounded text-xs ml-2 focus:outline-none"
-								onChange={(e) => setSortType(e.target.value)}
+								onChange={handleSort}
 							>
 								<option value="title">Title</option>
 								<option value="date">Date</option>
