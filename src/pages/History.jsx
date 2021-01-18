@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Table } from "antd";
+import { Table, Button } from "antd";
 import Page from "../components/Page";
 
 const columns = [
@@ -10,22 +10,57 @@ const columns = [
 		render: (title) => <p>{title}</p>,
 	},
 	{
-		title: "Date",
+		title: "Deadline",
 		dataIndex: "date",
 		key: "date",
-		render: (date) => <p>{date}</p>,
+		render: (date) => (
+			<p>
+				{new Date(date).toLocaleString("default", {
+					day: "numeric",
+					month: "long",
+				})}
+			</p>
+		),
 	},
-	{ title: "Action", key: "action", render: (title) => <p>Delete</p> },
+	{
+		title: "Started At",
+		dataIndex: "range",
+		key: "range",
+		render: (date) => {
+			let msg = date[0] ?? "No Date";
+			return <p>{msg}</p>;
+		},
+	},
+	{
+		title: "End At",
+		dataIndex: "range",
+		key: "range",
+		render: (date) => {
+			let msg = date[1] ?? "No Date";
+			return <p>{msg}</p>;
+		},
+	},
+	{
+		title: "Action",
+		key: "action",
+		render: (title) => (
+			<Button type="primary" danger>
+				Delete
+			</Button>
+		),
+	},
 ];
 
 export default function History() {
 	const [completedTodos, setCompletedTodos] = useState([]);
 
 	useEffect(() => {
-		let todos = JSON.parse(localStorage.getItem("todos")).filter(
-			(todo) => todo.status === "completed"
-		);
-		setCompletedTodos(todos);
+		let todos = JSON.parse(localStorage.getItem("todos"));
+
+		if (todos !== null) {
+			let filteredTodos = todos.filter((todo) => todo.status === "completed");
+			setCompletedTodos(filteredTodos);
+		}
 	}, []);
 
 	return (

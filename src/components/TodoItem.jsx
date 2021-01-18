@@ -5,6 +5,7 @@ import EditButton from "./Buttons/EditButton";
 import DeleteButton from "./Buttons/DeleteButton";
 
 const { confirm } = Modal;
+const { RangePicker } = DatePicker;
 
 export default function TodoItem(props) {
 	const [item, setItem] = useState(props.item);
@@ -12,6 +13,7 @@ export default function TodoItem(props) {
 	const [showActionButtons, setShowActionButtons] = useState(false);
 	const [editMode, setEditMode] = useState(false);
 	const [isModalVisible, setIsModalVisible] = useState(false);
+	const [range, setRange] = useState(null);
 
 	useEffect(() => {
 		setItem(props.item);
@@ -52,12 +54,11 @@ export default function TodoItem(props) {
 			: setShowActionButtons(true);
 	};
 
-	const handleStatusChange = () => {
-		// console.log("helllo");
-		// setIsModalVisible(true);
+	const handleCompleteTask = () => {
 		let updatedItem = {
 			...item,
 			status: "completed",
+			range: range,
 		};
 		props.handleUpdateTodo(updatedItem);
 		setItem(updatedItem);
@@ -93,7 +94,7 @@ export default function TodoItem(props) {
 					<>
 						<div className="inline-flex">
 							{showActionButtons ? (
-								<Checkbox onChange={handleStatusChange}></Checkbox>
+								<Checkbox onChange={() => setIsModalVisible(true)}></Checkbox>
 							) : null}
 							<p className="title ml-2">{props.item.title}</p>
 						</div>
@@ -136,7 +137,21 @@ export default function TodoItem(props) {
 					</>
 				)}
 			</Card>
-			<Popup isModalVisible={isModalVisible} />
+			<Modal
+				title="Total Spent Time"
+				visible={isModalVisible}
+				onOk={() => {
+					handleCompleteTask();
+					setIsModalVisible(false);
+				}}
+				onCancel={() => setIsModalVisible(false)}
+			>
+				<RangePicker
+					onChange={(value, dateString) => {
+						setRange(dateString);
+					}}
+				/>
+			</Modal>
 			<style jsx>{`
 				.title {
 					float: left;
@@ -160,32 +175,5 @@ export default function TodoItem(props) {
 				}
 			`}</style>
 		</>
-	);
-}
-
-function Popup(props) {
-	const [isModalVisible, setIsModalVisible] = useState(props.isModalVisible);
-
-	useEffect(() => {
-		setIsModalVisible(props.isModalVisible);
-	}, [props]);
-
-	const handleOk = () => {
-		setIsModalVisible(false);
-	};
-
-	const handleCancel = () => {
-		setIsModalVisible(false);
-	};
-
-	return (
-		<Modal
-			title="Basic Modal"
-			visible={isModalVisible}
-			onOk={handleOk}
-			onCancel={handleCancel}
-		>
-			<p>hello world</p>
-		</Modal>
 	);
 }

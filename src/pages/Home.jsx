@@ -37,6 +37,7 @@ export default function Home() {
 			title: item.title,
 			date: item.date,
 			id: item.id,
+			range: item.range,
 			status: item.status,
 		};
 
