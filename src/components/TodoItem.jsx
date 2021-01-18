@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { Card, Checkbox } from "antd";
+import { Card, Checkbox, DatePicker, Modal } from "antd";
+import { ExclamationCircleOutlined } from "@ant-design/icons";
 import EditButton from "./Buttons/EditButton";
 import DeleteButton from "./Buttons/DeleteButton";
+
+const { confirm } = Modal;
 
 export default function TodoItem(props) {
 	const [item, setItem] = useState(props.item);
 	const [title, setTitle] = useState();
 	const [showActionButtons, setShowActionButtons] = useState(false);
 	const [editMode, setEditMode] = useState(false);
+	const [isModalVisible, setIsModalVisible] = useState(false);
 
 	useEffect(() => {
 		setItem(props.item);
@@ -16,14 +20,6 @@ export default function TodoItem(props) {
 	const handleEditTodo = () => {
 		setTitle(item.title);
 		setEditMode(true);
-	};
-
-	const handleDeleteTodo = () => {
-		let isDelete = window.confirm("Are you sure you want to delete?");
-
-		if (isDelete) {
-			props.handleDeleteTodo(item.id);
-		}
 	};
 
 	const handleUpdateTodo = () => {
@@ -57,12 +53,31 @@ export default function TodoItem(props) {
 	};
 
 	const handleStatusChange = () => {
+		// console.log("helllo");
+		// setIsModalVisible(true);
 		let updatedItem = {
 			...item,
 			status: "completed",
 		};
 		props.handleUpdateTodo(updatedItem);
 		setItem(updatedItem);
+	};
+
+	const showDeleteConfirm = () => {
+		confirm({
+			title: "Are you sure delete this task?",
+			icon: <ExclamationCircleOutlined />,
+			// content: "Some descriptions",
+			okText: "Yes",
+			okType: "danger",
+			cancelText: "No",
+			onOk() {
+				props.handleDeleteTodo(item.id);
+			},
+			onCancel() {
+				console.log("Cancel");
+			},
+		});
 	};
 
 	return (
@@ -85,7 +100,7 @@ export default function TodoItem(props) {
 						{showActionButtons ? (
 							<div className="action-buttons">
 								<EditButton handleEditTodo={handleEditTodo} />
-								<DeleteButton handleDeleteTodo={handleDeleteTodo} />
+								<DeleteButton handleDeleteTodo={showDeleteConfirm} />
 							</div>
 						) : (
 							<div className="text-xs pt-0.5 date">
@@ -121,6 +136,7 @@ export default function TodoItem(props) {
 					</>
 				)}
 			</Card>
+			<Popup isModalVisible={isModalVisible} />
 			<style jsx>{`
 				.title {
 					float: left;
@@ -144,5 +160,32 @@ export default function TodoItem(props) {
 				}
 			`}</style>
 		</>
+	);
+}
+
+function Popup(props) {
+	const [isModalVisible, setIsModalVisible] = useState(props.isModalVisible);
+
+	useEffect(() => {
+		setIsModalVisible(props.isModalVisible);
+	}, [props]);
+
+	const handleOk = () => {
+		setIsModalVisible(false);
+	};
+
+	const handleCancel = () => {
+		setIsModalVisible(false);
+	};
+
+	return (
+		<Modal
+			title="Basic Modal"
+			visible={isModalVisible}
+			onOk={handleOk}
+			onCancel={handleCancel}
+		>
+			<p>hello world</p>
+		</Modal>
 	);
 }
