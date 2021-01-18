@@ -66,7 +66,6 @@ export default function Home() {
 		<Page>
 			<div className="flex justify-center">
 				<div className="mt-16">
-					<button onClick={() => console.log(todos)}>Check state</button>
 					<AddTodoItem handleAddTodo={handleAddTodo} />
 					<TodoList
 						todos={getCompletedTodosFilteredByDate}
