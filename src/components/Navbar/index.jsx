@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import classNames from "classnames";
+import Inner from "./Inner";
 
 export default function Navbar() {
 	const [isOpen, setIsOpen] = useState(false);
@@ -27,6 +28,12 @@ export default function Navbar() {
 					</li>
 					<li className="nav-item">
 						<Link to="/history">History</Link>
+					</li>
+					<li className="nav-item">
+						<Link to="/chart">Chart</Link>
+					</li>
+					<li className="nav-item">
+						<Link to="/charts">All Charts</Link>
 					</li>
 				</ul>
 				<div
@@ -121,4 +128,8 @@ export default function Navbar() {
 			`}</style>
 		</>
 	);
+}
+
+export function InnerNav() {
+	return <Inner />;
 }
