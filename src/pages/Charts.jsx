@@ -1,12 +1,5 @@
 import React from "react";
-import {
-	Switch,
-	Route,
-	Link,
-	useRouteMatch,
-	useParams,
-} from "react-router-dom";
-import { Button } from "antd";
+import { Switch, Route, useRouteMatch } from "react-router-dom";
 import { InnerNav } from "../components/Navbar/";
 import XYChart from "../components/Charts/XYChart";
 import PieChart from "../components/Charts/PieChart";
