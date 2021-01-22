@@ -4,7 +4,7 @@ import Home from "./pages/Home";
 import History from "./pages/History";
 import Playground from "./pages/Playground";
 import Chart from "./pages/Chart";
-import Charts from "./pages/Charts";
+import Timeline from "./pages/Timeline";
 import "./App.css";
 
 export default function App() {
@@ -14,7 +14,7 @@ export default function App() {
 				<Route exact path="/history" component={History} />
 				<Route exact path="/playground" component={Playground} />
 				<Route path="/chart" component={Chart} />
-				<Route path="/charts" component={Charts} />
+				<Route path="/timeline" component={Timeline} />
 				<Route exact path="/" component={Home} />
 			</Switch>
 			<style>{`

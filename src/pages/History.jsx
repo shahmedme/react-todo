@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Table, Button } from "antd";
+import axios from "axios";
+import { Table, Button, message } from "antd";
+import { TODOS } from "../endpoints";
 import Page from "../components/Page";
 
 export default function History() {
@@ -52,9 +54,16 @@ export default function History() {
 					type="primary"
 					danger
 					onClick={() => {
-						let filteredTodoList = todos.filter((todo) => todo.id !== id);
-						localStorage.setItem("todos", JSON.stringify(filteredTodoList));
-						setTodos(filteredTodoList);
+						axios
+							.delete(TODOS + "/" + id)
+							.then((res) => {
+								let filteredTodoList = todos.filter((todo) => todo.id !== id);
+								setTodos(filteredTodoList);
+								message.info("Successfully Deleted");
+							})
+							.catch((err) => {
+								console.log(err);
+							});
 					}}
 				>
 					Delete
@@ -64,11 +73,14 @@ export default function History() {
 	];
 
 	useEffect(() => {
-		let todos = JSON.parse(localStorage.getItem("todos"));
+		async function fetchData() {
+			let res = await axios.get(TODOS);
 
-		if (todos !== null) {
-			setTodos(todos);
+			if (res.data.length > 0) {
+				setTodos(res.data);
+			}
 		}
+		fetchData();
 	}, []);
 
 	return (

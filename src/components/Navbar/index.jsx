@@ -33,7 +33,7 @@ export default function Navbar() {
 						<Link to="/chart">Chart</Link>
 					</li>
 					<li className="nav-item">
-						<Link to="/charts">All Charts</Link>
+						<Link to="/timeline">Timeline</Link>
 					</li>
 				</ul>
 				<div

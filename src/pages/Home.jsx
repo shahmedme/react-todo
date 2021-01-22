@@ -1,19 +1,21 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { message } from "antd";
 import Page from "../components/Page";
 import AddTodoItem from "../components/AddTodoItem";
 import TodoList from "../components/TodoList";
 import WeatherBar from "../components/WeatherBar";
+import { TODOS } from "../endpoints";
 
 export default function Home() {
 	const [todos, setTodos] = useState([]);
 
 	useEffect(() => {
-		let allTodos = JSON.parse(localStorage.getItem("todos"));
-
-		if (allTodos !== null) {
-			setTodos(allTodos);
+		async function fetchData() {
+			let res = await axios.get(TODOS);
+			setTodos(res.data);
 		}
+		fetchData();
 	}, []);
 
 	const handleAddTodo = (item) => {
@@ -21,9 +23,15 @@ export default function Home() {
 		newTodoList.sort((item1, item2) =>
 			item1.title.toLowerCase() > item2.title.toLowerCase() ? 1 : -1
 		);
-		localStorage.setItem("todos", JSON.stringify(newTodoList));
-		setTodos(newTodoList);
-		message.success("Successfully Added");
+		axios
+			.post(TODOS, item)
+			.then(function (res) {
+				setTodos(newTodoList);
+				message.success("Successfully Added");
+			})
+			.catch(function (err) {
+				console.log(err);
+			});
 	};
 
 	const handleUpdateTodo = (item) => {
@@ -40,24 +48,32 @@ export default function Home() {
 			range: item.range,
 			status: item.status,
 		};
-
-		localStorage.setItem("todos", JSON.stringify(updatedTodos));
-		// let filteredTodos = updatedTodos.filter(
-		// 	(todo) => todo.status !== "completed"
-		// );
 		setTodos(updatedTodos);
-		message.info("Successfully Updated");
+
+		axios
+			.put(TODOS + "/" + item.id, item)
+			.then(function (res) {
+				message.info("Successfully Updated");
+			})
+			.catch(function (err) {
+				console.log(err);
+			});
 	};
 
 	const handleDeleteTodo = (id) => {
-		let filteredTodoList = todos.filter((todo) => todo.id !== id);
-
-		localStorage.setItem("todos", JSON.stringify(filteredTodoList));
-		setTodos(filteredTodoList);
-		message.info("Successfully Deleted");
+		axios
+			.delete(TODOS + "/" + id)
+			.then((res) => {
+				let filteredTodoList = todos.filter((todo) => todo.id !== id);
+				setTodos(filteredTodoList);
+				message.info("Successfully Deleted");
+			})
+			.catch((err) => {
+				console.log(err);
+			});
 	};
 
-	const getCompletedTodosFilteredByDate = () =>
+	const getIncompletedTodosSortedByDate = () =>
 		todos
 			.filter((todo) => todo.status !== "completed")
 			.sort((item1, item2) => Date.parse(item1.date) - Date.parse(item2.date));
@@ -68,7 +84,7 @@ export default function Home() {
 				<div className="mt-16">
 					<AddTodoItem handleAddTodo={handleAddTodo} />
 					<TodoList
-						todos={getCompletedTodosFilteredByDate}
+						todos={getIncompletedTodosSortedByDate}
 						handleUpdateTodo={handleUpdateTodo}
 						handleDeleteTodo={handleDeleteTodo}
 					/>
