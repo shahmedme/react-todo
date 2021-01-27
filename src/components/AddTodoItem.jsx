@@ -1,5 +1,4 @@
 import React from "react";
-import { nanoid } from "nanoid";
 import { Form, Input, Button, DatePicker } from "antd";
 
 export default function AddTodoItem(props) {
@@ -9,7 +8,6 @@ export default function AddTodoItem(props) {
 		values = {
 			...values,
 			date: values["date"].format("YYYY-MM-DD"),
-			id: nanoid(),
 			status: "new",
 		};
 		props.handleAddTodo(values);

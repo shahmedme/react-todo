@@ -4,7 +4,6 @@ import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 import Page from "../components/Page";
-import { TODOS } from "../endpoints";
 
 am4core.useTheme(am4themes_animated);
 
@@ -13,7 +12,14 @@ export default function Timeline() {
 
 	useEffect(() => {
 		async function setChart() {
-			let res = await axios.get(TODOS);
+			let res = await axios.get(
+				process.env.REACT_APP_WEBSITE_NAME + "/api/todos",
+				{
+					headers: {
+						authorization: "Bearer " + localStorage.getItem("token"),
+					},
+				}
+			);
 			let todos = res.data.filter((todo) => todo.status === "completed");
 
 			let data = [];
@@ -81,8 +87,8 @@ export default function Timeline() {
 			x.scrollbarX.series.push(series);
 			x.scrollbarX.parent = x.bottomAxesContainer;
 
-			dateAxis.start = 0.79;
-			dateAxis.keepSelection = true;
+			// dateAxis.start = 0.1;
+			// dateAxis.keepSelection = true;
 
 			chart.current = x;
 

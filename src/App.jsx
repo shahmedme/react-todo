@@ -5,17 +5,24 @@ import History from "./pages/History";
 import Playground from "./pages/Playground";
 import Chart from "./pages/Chart";
 import Timeline from "./pages/Timeline";
+import Login from "./pages/Login";
+import Logout from "./pages/Logout";
+import Register from "./pages/Register";
+import PrivateRoute from "./components/PrivateRoute";
 import "./App.css";
 
 export default function App() {
 	return (
 		<Router>
 			<Switch>
-				<Route exact path="/history" component={History} />
+				<PrivateRoute exact path="/history" component={History} />
 				<Route exact path="/playground" component={Playground} />
-				<Route path="/chart" component={Chart} />
-				<Route path="/timeline" component={Timeline} />
-				<Route exact path="/" component={Home} />
+				<PrivateRoute path="/chart" component={Chart} />
+				<PrivateRoute path="/timeline" component={Timeline} />
+				<Route exact path="/login" component={Login} />
+				<Route exact path="/logout" component={Logout} />
+				<Route exact path="/register" component={Register} />
+				<PrivateRoute exact path="/" component={Home} />
 			</Switch>
 			<style>{`
 				a:hover {

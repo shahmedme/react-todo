@@ -27,9 +27,8 @@ export default function TodoItem(props) {
 	const handleUpdateTodo = () => {
 		if (title.length !== 0) {
 			let updatedItem = {
+				...item,
 				title: title,
-				date: item.date,
-				id: item.id,
 			};
 			props.handleUpdateTodo(updatedItem);
 			setItem(updatedItem);
@@ -60,6 +59,7 @@ export default function TodoItem(props) {
 			status: "completed",
 			range: range,
 		};
+
 		props.handleUpdateTodo(updatedItem);
 		setItem(updatedItem);
 	};
@@ -73,7 +73,7 @@ export default function TodoItem(props) {
 			okType: "danger",
 			cancelText: "No",
 			onOk() {
-				props.handleDeleteTodo(item.id);
+				props.handleDeleteTodo(item._id);
 			},
 			onCancel() {
 				console.log("Cancel");

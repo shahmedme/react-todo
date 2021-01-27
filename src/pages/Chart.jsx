@@ -4,7 +4,6 @@ import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 import Page from "../components/Page";
-import { TODOS } from "../endpoints";
 
 am4core.useTheme(am4themes_animated);
 
@@ -13,7 +12,14 @@ export default function Chart() {
 
 	useLayoutEffect(() => {
 		async function setChart() {
-			let res = await axios.get(TODOS);
+			let res = await axios.get(
+				process.env.REACT_APP_WEBSITE_NAME + "/api/todos",
+				{
+					headers: {
+						authorization: "Bearer " + localStorage.getItem("token"),
+					},
+				}
+			);
 			let todos = res.data.filter((todo) => todo.status === "completed");
 
 			let todoData = todos.map((todo) => {

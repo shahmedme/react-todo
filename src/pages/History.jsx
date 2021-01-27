@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Table, Button, message } from "antd";
-import { TODOS } from "../endpoints";
 import Page from "../components/Page";
 
 export default function History() {
@@ -48,16 +47,23 @@ export default function History() {
 		{
 			title: "Action",
 			key: "action",
-			dataIndex: "id",
-			render: (id) => (
+			dataIndex: "_id",
+			render: (_id) => (
 				<Button
 					type="primary"
 					danger
 					onClick={() => {
 						axios
-							.delete(TODOS + "/" + id)
+							.delete(process.env.REACT_APP_WEBSITE_NAME + "/api/todos", {
+								headers: {
+									authorization: "Bearer " + localStorage.getItem("token"),
+								},
+								data: {
+									id: _id,
+								},
+							})
 							.then((res) => {
-								let filteredTodoList = todos.filter((todo) => todo.id !== id);
+								let filteredTodoList = todos.filter((todo) => todo._id !== _id);
 								setTodos(filteredTodoList);
 								message.info("Successfully Deleted");
 							})
@@ -74,7 +80,14 @@ export default function History() {
 
 	useEffect(() => {
 		async function fetchData() {
-			let res = await axios.get(TODOS);
+			let res = await axios.get(
+				process.env.REACT_APP_WEBSITE_NAME + "/api/todos",
+				{
+					headers: {
+						authorization: "Bearer " + localStorage.getItem("token"),
+					},
+				}
+			);
 
 			if (res.data.length > 0) {
 				setTodos(res.data);
