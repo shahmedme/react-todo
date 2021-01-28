@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { Table, Button, message } from "antd";
+import axiosInstance from "../utils/axios";
 import Page from "../components/Page";
 
 export default function History() {
@@ -53,11 +53,8 @@ export default function History() {
 					type="primary"
 					danger
 					onClick={() => {
-						axios
+						axiosInstance
 							.delete(process.env.REACT_APP_WEBSITE_NAME + "/api/todos", {
-								headers: {
-									authorization: "Bearer " + localStorage.getItem("token"),
-								},
 								data: {
 									id: _id,
 								},
@@ -80,13 +77,8 @@ export default function History() {
 
 	useEffect(() => {
 		async function fetchData() {
-			let res = await axios.get(
-				process.env.REACT_APP_WEBSITE_NAME + "/api/todos",
-				{
-					headers: {
-						authorization: "Bearer " + localStorage.getItem("token"),
-					},
-				}
+			let res = await axiosInstance.get(
+				process.env.REACT_APP_WEBSITE_NAME + "/api/todos"
 			);
 
 			if (res.data.length > 0) {

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { Redirect } from "react-router-dom";
 import { Form, Input, Button, message } from "antd";
+import axiosInstance from "../utils/axios";
 import Page from "../components/Page";
 
 export default function Login() {
@@ -9,14 +9,8 @@ export default function Login() {
 	const [form] = Form.useForm();
 
 	const onFinish = (values) => {
-		const headers = {
-			"Content-Type": "application/json",
-		};
-
-		axios
-			.post(process.env.REACT_APP_WEBSITE_NAME + "/api/login", values, {
-				headers: headers,
-			})
+		axiosInstance
+			.post(process.env.REACT_APP_WEBSITE_NAME + "/api/login", values)
 			.then((res) => {
 				form.resetFields();
 				localStorage.setItem("token", res.data.token);

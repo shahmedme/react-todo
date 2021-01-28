@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from "react";
-import axios from "axios";
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
+import axiosInstance from "../utils/axios";
 import Page from "../components/Page";
 
 am4core.useTheme(am4themes_animated);
@@ -12,13 +12,8 @@ export default function Timeline() {
 
 	useEffect(() => {
 		async function setChart() {
-			let res = await axios.get(
-				process.env.REACT_APP_WEBSITE_NAME + "/api/todos",
-				{
-					headers: {
-						authorization: "Bearer " + localStorage.getItem("token"),
-					},
-				}
+			let res = await axiosInstance.get(
+				process.env.REACT_APP_WEBSITE_NAME + "/api/todos"
 			);
 			let todos = res.data.filter((todo) => todo.status === "completed");
 

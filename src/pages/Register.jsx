@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { Redirect } from "react-router-dom";
 import { Form, Input, Button, message } from "antd";
+import axiosInstance from "../utils/axios";
 import Page from "../components/Page";
 
 export default function Register() {
@@ -9,14 +9,8 @@ export default function Register() {
 	const [form] = Form.useForm();
 
 	const onFinish = (values) => {
-		const headers = {
-			"Content-Type": "application/json",
-		};
-
-		axios
-			.post(process.env.REACT_APP_WEBSITE_NAME + "/api/users", values, {
-				headers: headers,
-			})
+		axiosInstance
+			.post(process.env.REACT_APP_WEBSITE_NAME + "/api/users", values)
 			.then((res) => {
 				form.resetFields();
 				setIsSuccessRegister(true);
